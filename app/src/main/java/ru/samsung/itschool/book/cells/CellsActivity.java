@@ -2,6 +2,8 @@ package ru.samsung.itschool.book.cells;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.Toast;
 
 
 import task.Stub;
@@ -29,23 +32,8 @@ public class CellsActivity extends Activity implements OnClickListener,
         setContentView(R.layout.cells);
         makeCells();
 
-        generate();
-
     }
 
-    void generate() {
-
-        //Эту строку нужно удалить
-        Task.showMessage(this, "Добавьте код в функцию активности generate() для генерации клеточного поля");
-
-
-        for (int i = 0; i < HEIGHT; i++)
-            for (int j = 0; j < WIDTH; j++) {
-                //ADD YOUR CODE HERE
-                //....
-
-            }
-    }
 
     @Override
     public boolean onLongClick(View v) {
@@ -57,15 +45,22 @@ public class CellsActivity extends Activity implements OnClickListener,
     @Override
     public void onClick(View v) {
         //Эту строку нужно удалить
-        Stub.show(this, "Добавьте код в функцию активности onClick() - реакцию на нажатие на клетку");
-
         Button tappedCell = (Button) v;
 
         //Получаем координтаты нажатой клетки
         int tappedX = getX(tappedCell);
         int tappedY = getY(tappedCell);
-        //ADD YOUR CODE HERE
-        //....
+        int color = ((ColorDrawable)cells[tappedX][tappedY].getBackground()).getColor();
+
+
+        for (int i = 0; i < HEIGHT; i ++) {
+            if (color == Color.WHITE) {cells[i][tappedY].setBackgroundColor(Color.BLACK);}
+            else if (color == Color.BLACK) {cells[i][tappedY].setBackgroundColor(Color.WHITE);}
+        }
+        for (int j = 0; j < WIDTH; j ++) {
+            if (color == Color.WHITE) {cells[tappedX][j].setBackgroundColor(Color.BLACK);}
+            else if (color == Color.BLACK) {cells[tappedX][j].setBackgroundColor(Color.WHITE);}
+        }
 
     }
 
@@ -95,7 +90,10 @@ public class CellsActivity extends Activity implements OnClickListener,
                 cells[i][j].setOnClickListener(this);
                 cells[i][j].setOnLongClickListener(this);
                 cells[i][j].setTag(i + "," + j);
-                cellsLayout.addView(cells[i][j]);
+                if (Math.floor(Math.random() * (1 - 0 + 1)) + 0 == 0) cells[i][j].setBackgroundColor(Color.BLACK);
+                else cells[i][j].setBackgroundColor(Color.WHITE);
+
+            cellsLayout.addView(cells[i][j]);
             }
     }
 
